@@ -1,8 +1,8 @@
 import csv
+import easygui
 import nltk
-from nltk import ne_chunk, word_tokenize, sent_tokenize
+from nltk import word_tokenize, sent_tokenize
 
-# is the language sample speech or text? y/n (if no ask for input for the text)
 user_input_mode = input('Is the language sample speech(s) or text(t)? ')
 
 
@@ -17,18 +17,15 @@ def check_input_mode(input_mode):
 
 check_input_mode(user_input_mode)
 
-# read from a text file a language sample
 text = input('Please enter a sentence or utterance to analyse. ')
 
-# tokenize the sample by sentence and word level
 sample_sentence_tokens = sent_tokenize(text)
 print('Here is the sentence level tokenized language sample: {}'.format(sample_sentence_tokens))
 
-# function that takes sentence and word tokens and tags and chucks into data structure we want
 analysed_language_data = []
 
 
-def insert_sentence_tokens_into_data_structure(sentence_tokens):
+def prepare_analysed_language_data(sentence_tokens):
     for sentence_token in sentence_tokens:
         word_tokens = word_tokenize(sentence_token)
         parsed_tokens = nltk.pos_tag(word_tokens)
@@ -52,15 +49,15 @@ def insert_sentence_tokens_into_data_structure(sentence_tokens):
     return analysed_language_data
 
 
-parsed_language_data = insert_sentence_tokens_into_data_structure(sample_sentence_tokens)
+parsed_language_data = prepare_analysed_language_data(sample_sentence_tokens)
 print(parsed_language_data)
 
-# field_names = ['name', 'age']
-# data = [
-# {'name': 'Jill', 'age': 32},
-# {'name': 'Sara', 'age': 28},
-# ]
-# with open('team.csv', 'w+') as csv_file:
-# spreadsheet = csv.DictWriter(csv_file, fieldnames=field_names)
-# spreadsheet.writeheader()
-# spreadsheet.writerows(data)
+field_names = ['sentence', 'parsed_tokens']
+
+with open('languageAnalysis.csv', 'w+') as csv_file:
+    spreadsheet = csv.DictWriter(csv_file, fieldnames=field_names)
+    spreadsheet.writeheader()
+    spreadsheet.writerows(parsed_language_data)
+
+easygui.msgbox("For interpretation of token tags, please see the table at this site: "
+               "https://www.sketchengine.eu/modified-penn-treebank-tagset/", title="What's next")
