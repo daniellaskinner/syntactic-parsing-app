@@ -3,6 +3,20 @@ import nltk
 from nltk import ne_chunk, word_tokenize, sent_tokenize
 
 # is the language sample speech or text? y/n (if no ask for input for the text)
+user_input_mode = input('Is the language sample speech(s) or text(t)? ')
+
+
+def check_input_mode(input_mode):
+    if input_mode == 's':
+        print('Speech to text is not yet an enabled feature, coming soon!')
+        exit()
+    elif input_mode != 't':
+        print('This is not a recognised input mode, please try again.')
+        exit()
+
+
+check_input_mode(user_input_mode)
+
 # read from a text file a language sample
 text = input('Please enter a sentence or utterance to analyse. ')
 
@@ -32,11 +46,21 @@ def insert_sentence_tokens_into_data_structure(sentence_tokens):
 
             current_sentence_dictionary['parsed_tokens'].append(current_parsed_token_dictionary)
 
+        # remove the full stops from the parsed tokens list of dictionaries
         current_sentence_dictionary['parsed_tokens'].pop()
         analysed_language_data.append(current_sentence_dictionary)
     return analysed_language_data
 
 
-# remove the full stops from the parsed tokens list of dictionaries
 parsed_language_data = insert_sentence_tokens_into_data_structure(sample_sentence_tokens)
 print(parsed_language_data)
+
+# field_names = ['name', 'age']
+# data = [
+# {'name': 'Jill', 'age': 32},
+# {'name': 'Sara', 'age': 28},
+# ]
+# with open('team.csv', 'w+') as csv_file:
+# spreadsheet = csv.DictWriter(csv_file, fieldnames=field_names)
+# spreadsheet.writeheader()
+# spreadsheet.writerows(data)
